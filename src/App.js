@@ -24,9 +24,13 @@ let isInitialized = false;
 //let ctrbalance = 0;
 
 function App() {
+  const  Action_Type = {MINT:'mint',NEW_MINT:'newMint',BALANCE:'balance',NEW_BALANCE:'newBalance'}
+  const  Status_Type = {PENDING:'pending',SUCCESS:'success'}
   const [currentAccount, setCurrentAccount] = useState("");
   const [balance, setBalance] = useState(0);
   const [newBalance, setNewBalance] = useState(0);
+  const [loading, setLoading] = useState({status:null,message:'',actionType:''});
+
   const connectWalletHandler = async () => {
     const { ethereum } = window;
     if (!ethereum) {
@@ -117,12 +121,16 @@ function App() {
       }
       console.log("Initialize mint....");
       let nftTxn = await nftContract.mintItems(1);
+      setLoading({status: Status_Type.PENDING, message: 'Initialize mint....',actionType: Action_Type.MINT})
       console.log("Mining NFT... please wait");
+      setLoading({status: Status_Type.PENDING, message: 'Mining NFT.... Please wait',actionType: Action_Type.MINT})
+
       await nftTxn.wait();
       console.log("--nftTxn--",nftTxn)
       if(nftTxn.hash){
           setBalance(+balance + 1)
       }
+      setLoading({status: Status_Type.SUCCESS ,message:`Miniting complete please see the transiction  <a target="_blank" href=https://ropsten.etherscan.io/tx/${nftTxn.hash}>here</a>`, actionType: Action_Type.MINT})
 
       console.log(`Mined, see transaction: https://ropsten.etherscan.io/tx/${nftTxn.hash}`);
   };
@@ -134,14 +142,21 @@ function App() {
      let valid = await canMint();
      if(valid){
        console.log("Initialize payment");
-       //let nftTxn = await nftContract.mint(5);
-       let nftTxn = await nftNewContract.mint(1)
-       console.log("Mining.. new nft. please wait");
-       await nftTxn.wait();
-       console.log(`Mined, see transaction: https://ropsten.etherscan.io/tx/${nftTxn.hash}`);
-       if(nftTxn.hash){
+        //let nftTxn = await nftContract.mint(5);
+         setLoading({status: Status_Type.PENDING, message: 'Initialize mint....',actionType: Action_Type.NEW_MINT})
+
+         let nftTxn = await nftNewContract.mint(1)
+
+         console.log("Mining.. new nft. please wait");
+         setLoading({status: Status_Type.PENDING, message: 'Mining NFT.... Please wait',actionType: Action_Type.NEW_MINT})
+         await nftTxn.wait();
+         console.log(`Mined, see transaction: https://ropsten.etherscan.io/tx/${nftTxn.hash}`);
+         setLoading({status: Status_Type.SUCCESS ,message:`Miniting complete please see the transiction  <a target="_blank" href=https://ropsten.etherscan.io/tx/${nftTxn.hash}>here</a>`, actionType: Action_Type.NEW_MINT})
+
+         if(nftTxn.hash){
            setNewBalance(+newBalance + 1)
-       }
+        }
+
      }
       else{
         alert('maximum mint limit reached' )
@@ -220,7 +235,8 @@ function App() {
 
             <div><span><b>Current Balance :</b> {balance}</span></div>
             <Row className="customRow align-items-center justify-content-center" >
-                <Button size="lg" variant="primary" onClick={mintNftHandler} > Mint NFT</Button>
+                {loading.actionType === Action_Type.MINT && loading.message ? <span dangerouslySetInnerHTML={{__html: loading.message}}></span>:''}
+                <Button size="lg" disabled={loading.actionType === Action_Type.MINT && loading.status == Status_Type.PENDING} variant="primary" onClick={mintNftHandler} > Mint NFT</Button>
                 <Button size="lg" variant="primary" onClick={NftBalanceHandler}>Check Balance</Button>
             </Row >
             <h4>New Contract : <a  target='_blank' href={`https://ropsten.etherscan.io/address/${newContractAddress}`}>{newContractAddress}</a></h4>
@@ -228,7 +244,8 @@ function App() {
 
             <div><span><b>Current Balance :</b>{newBalance}</span></div>
             <Row className="customRow align-items-center justify-content-center">
-                <Button size="lg" variant="primary" onClick={NewNftMintHandler}>Mint NFT</Button>
+                {loading.actionType === Action_Type.NEW_MINT && loading.message ? <span dangerouslySetInnerHTML={{__html: loading.message}}></span>:''}
+                <Button size="lg" disabled={loading.actionType === Action_Type.NEW_MINT && loading.status == Status_Type.PENDING} variant="primary" onClick={NewNftMintHandler} > Mint NFT</Button>
                 <Button size="lg" variant="primary" onClick={NewNftBalanceHandler}>Check Balance</Button>
             </Row>
         </Container>
