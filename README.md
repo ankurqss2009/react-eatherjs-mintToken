@@ -1,13 +1,16 @@
-# NFT Collectible Smart Contract
+# NFT Mint Gated Token
 
-This is a companion code repository to Scrappy Squirrels' [Medium article](https://medium.com/scrappy-squirrels/tutorial-building-a-web3-frontend-with-react-e0a87ea3bad) on building a web3 frontend with React.
 
-## About Scrappy Squirrels
+# About Mint Gated Token
 
-<img src='squirrels.gif' height="250" width="250" />
 
-This library was created as part of the Scrappy Squirrels Project. 
+This library was created as part of the Demo Project. 
 
-Scrappy Squirrels is a collection of 10,000 randomly generated NFTs on the Ethereum Blockchain. Scrappy Squirrels are meant for buyers, creators, and developers who are completely new to the NFT ecosystem.
+#Setup The Project
 
-The community is built around learning about the NFT revolution, exploring its current use cases, discovering new applications, and finding members to collaborate on exciting projects with.
+create account on eathersacn and copy the api key from https://etherscan.io/myapikey
+and update it to .env property REACT_APP_EATHERSCAN_API_KEY 
+
+
+run npm install
+then run npm start
