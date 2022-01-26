@@ -2,7 +2,7 @@
 <project version="4">
   <component name="ProjectModuleManager">
     <modules>
-      <module fileurl="file://$PROJECT_DIR$/.idea/react-eatherjs-mintToken.iml" filepath="$PROJECT_DIR$/.idea/react-eatherjs-mintToken.iml" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/react-upload-score.iml" filepath="$PROJECT_DIR$/.idea/react-upload-score.iml" />
     </modules>
   </component>
 </project>
